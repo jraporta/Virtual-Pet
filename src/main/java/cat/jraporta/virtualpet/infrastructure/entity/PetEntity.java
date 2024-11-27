@@ -1,10 +1,12 @@
-package cat.jraporta.virtualpet.infrastructure;
+package cat.jraporta.virtualpet.infrastructure.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+@ToString
 @AllArgsConstructor
 @Getter
 @Table("pet")

@@ -1,9 +1,9 @@
 package cat.jraporta.virtualpet.application;
 
+import cat.jraporta.virtualpet.application.dto.PetDtoMapper;
+import cat.jraporta.virtualpet.application.dto.PetDto;
+import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.port.in.PetService;
-import cat.jraporta.virtualpet.infrastructure.IdMapper;
-import cat.jraporta.virtualpet.infrastructure.PetEntity;
-import cat.jraporta.virtualpet.infrastructure.PetMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -12,18 +12,17 @@ import reactor.core.publisher.Mono;
 @Service
 public class PetServiceAdapter {
 
-    private PetService petService;
-    private PetMapper petMapper;
-    private IdMapper idMapper;
+    private PetService<Long> petService;
+    private PetDtoMapper petDtoMapper;
 
-    public Mono<String> savePet(PetEntity petEntity){
-        return petService.savePet(petMapper.mapToPet(petEntity))
-                .map(pet -> idMapper.mapToLong(pet.getPetId()).toString());
+    public Mono<Long> savePet(PetDto petDto){
+        return petService.savePet(petDtoMapper.toDomain(petDto))
+                .map(Pet::getId);
     }
 
-    public Mono<PetEntity> getPetById(Long id){
-        return petService.getPetById(idMapper.mapToPetId(id))
-                .map(petMapper::mapToPetEntity);
+    public Mono<PetDto> getPetById(Long id){
+        return petService.getPetById(id)
+                .map(petDtoMapper::toDto);
     }
 
 }

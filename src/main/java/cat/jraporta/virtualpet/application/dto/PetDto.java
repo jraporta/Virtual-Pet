@@ -1,15 +1,15 @@
-package cat.jraporta.virtualpet.core.domain;
+package cat.jraporta.virtualpet.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
-@Getter
 @AllArgsConstructor
-public class Pet<ID> {
+@Getter
+@ToString
+public class PetDto {
 
-    private ID id;
+    private Long id;
 
     private String name;
 

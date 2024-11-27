@@ -1,12 +1,11 @@
 package cat.jraporta.virtualpet.core.port.out;
 
-import cat.jraporta.virtualpet.core.domain.PetId;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import reactor.core.publisher.Mono;
 
-public interface PetRepository {
+public interface PetRepository<ID> {
 
-    Mono<Pet> savePet(Pet pet);
-    Mono<Pet> getPetById(PetId petId);
+    Mono<Pet<ID>> savePet(Pet<ID> pet);
+    Mono<Pet<ID>> getPetById(ID id);
 
 }

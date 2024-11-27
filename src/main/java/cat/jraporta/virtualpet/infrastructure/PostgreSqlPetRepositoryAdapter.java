@@ -1,29 +1,32 @@
 package cat.jraporta.virtualpet.infrastructure;
 
-import cat.jraporta.virtualpet.core.domain.PetId;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
+import cat.jraporta.virtualpet.infrastructure.entity.PetEntityMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @AllArgsConstructor
-@Component
-public class PostgreSqlPetRepositoryAdapter implements PetRepository {
+@Repository
+public class PostgreSqlPetRepositoryAdapter implements PetRepository<Long> {
 
     PostgreSqlPetRepository postgreSqlPetRepository;
-    PetMapper petMapper;
-    IdMapper idMapper;
+    PetEntityMapper petEntityMapper;
 
     @Override
-    public Mono<Pet> savePet(Pet pet) {
-        return postgreSqlPetRepository.save(petMapper.mapToPetEntity(pet))
-                .map(petMapper::mapToPet);
+    public Mono<Pet<Long>> savePet(Pet<Long> pet) {
+        log.debug("Save pet: {}", pet.toString());
+        return postgreSqlPetRepository.save(petEntityMapper.toEntity(pet))
+                .map(petEntityMapper::toDomain);
     }
 
     @Override
-    public Mono<Pet> getPetById(PetId petId) {
-        return postgreSqlPetRepository.findById(idMapper.mapToLong(petId))
-                .map(petMapper::mapToPet);
+    public Mono<Pet<Long>> getPetById(Long id) {
+        log.debug("Get pet with id: {}", id);
+        return postgreSqlPetRepository.findById(id)
+                .map(petEntityMapper::toDomain);
     }
 }

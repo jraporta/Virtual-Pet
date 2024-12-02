@@ -24,7 +24,7 @@ public class PostgreSqlPetRepositoryAdapter implements PetRepository<Long> {
     }
 
     @Override
-    public Mono<Pet<Long>> getPetById(Long id) {
+    public Mono<Pet<Long>> findById(Long id) {
         log.debug("Get pet with id: {}", id);
         return postgreSqlPetRepository.findById(id)
                 .map(petEntityMapper::toDomain);

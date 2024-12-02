@@ -24,6 +24,6 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Pet<ID>> getPetById(ID id) {
         log.debug("get pet with id: {}", id);
-        return petRepository.getPetById(id);
+        return petRepository.findById(id);
     }
 }

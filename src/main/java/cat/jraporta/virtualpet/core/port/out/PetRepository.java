@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 public interface PetRepository<ID> {
 
     Mono<Pet<ID>> savePet(Pet<ID> pet);
-    Mono<Pet<ID>> getPetById(ID id);
+    Mono<Pet<ID>> findById(ID id);
 
 }

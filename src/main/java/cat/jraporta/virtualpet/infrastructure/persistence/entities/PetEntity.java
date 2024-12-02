@@ -1,6 +1,5 @@
-package cat.jraporta.virtualpet.infrastructure.entity;
+package cat.jraporta.virtualpet.infrastructure.persistence.entities;
 
-import cat.jraporta.virtualpet.core.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,16 +9,12 @@ import org.springframework.data.relational.core.mapping.Table;
 @ToString
 @AllArgsConstructor
 @Getter
-@Table("user")
-public class UserEntity {
+@Table("pet")
+public class PetEntity {
 
     @Id
     private Long id;
 
     private String name;
-
-    private String password;
-
-    private Role role;
 
 }

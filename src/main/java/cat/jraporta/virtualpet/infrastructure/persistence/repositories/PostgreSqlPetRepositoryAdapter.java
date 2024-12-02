@@ -1,8 +1,8 @@
-package cat.jraporta.virtualpet.infrastructure;
+package cat.jraporta.virtualpet.infrastructure.persistence.repositories;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
-import cat.jraporta.virtualpet.infrastructure.entity.PetEntityMapper;
+import cat.jraporta.virtualpet.infrastructure.persistence.entities.PetEntityMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 @Repository
 public class PostgreSqlPetRepositoryAdapter implements PetRepository<Long> {
 
-    PostgreSqlPetRepository postgreSqlPetRepository;
-    PetEntityMapper petEntityMapper;
+    private final PostgreSqlPetRepository postgreSqlPetRepository;
+    private final PetEntityMapper petEntityMapper;
 
     @Override
     public Mono<Pet<Long>> savePet(Pet<Long> pet) {

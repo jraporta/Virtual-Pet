@@ -1,5 +1,6 @@
-package cat.jraporta.virtualpet.application;
+package cat.jraporta.virtualpet.infrastructure.api;
 
+import cat.jraporta.virtualpet.application.UserServiceAdapter;
 import cat.jraporta.virtualpet.application.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RestController
 public class LoginController {
 
-    private UserServiceAdapter userServiceAdapter;
+    private final UserServiceAdapter userServiceAdapter;
 
     @PostMapping("api/user")
     public Mono<ResponseEntity<Long>> createUser(@RequestBody UserDto userDto){
@@ -21,7 +22,7 @@ public class LoginController {
                 .map(ResponseEntity::ok);
     }
 
-    @GetMapping("api/user/{id}")
+    @GetMapping("api/user/{name}")
     public Mono<ResponseEntity<UserDto>> getUser(@PathVariable String name){
         log.debug("getUser with name: {}", name);
         return userServiceAdapter.getUserByName(name)

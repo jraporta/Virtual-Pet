@@ -1,6 +1,6 @@
-package cat.jraporta.virtualpet.infrastructure;
+package cat.jraporta.virtualpet.infrastructure.persistence.repositories;
 
-import cat.jraporta.virtualpet.infrastructure.entity.PetEntity;
+import cat.jraporta.virtualpet.infrastructure.persistence.entities.PetEntity;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 

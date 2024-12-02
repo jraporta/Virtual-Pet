@@ -1,5 +1,6 @@
-package cat.jraporta.virtualpet.application;
+package cat.jraporta.virtualpet.infrastructure.api;
 
+import cat.jraporta.virtualpet.application.PetServiceAdapter;
 import cat.jraporta.virtualpet.application.dto.PetDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RestController
 public class PetController {
 
-    private PetServiceAdapter petServiceAdapter;
+    private final PetServiceAdapter petServiceAdapter;
 
     @PostMapping("api/create")
     public Mono<ResponseEntity<Long>> createPet(@RequestBody PetDto petDto){

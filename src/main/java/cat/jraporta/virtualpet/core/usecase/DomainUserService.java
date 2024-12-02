@@ -1,12 +1,11 @@
 package cat.jraporta.virtualpet.core.usecase;
 
 import cat.jraporta.virtualpet.core.domain.User;
+import cat.jraporta.virtualpet.core.exceptions.AlreadyExistingUserException;
 import cat.jraporta.virtualpet.core.port.in.UserService;
 import cat.jraporta.virtualpet.core.port.out.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -15,12 +14,19 @@ import reactor.core.publisher.Mono;
 @Service
 public class DomainUserService<ID> implements UserService<ID> {
 
-    UserRepository<ID> userRepository;
+    private final UserRepository<ID> userRepository;
 
     @Override
     public Mono<User<ID>> saveUser(User<ID> user) {
-        log.debug("save user: {}", user);
-        return userRepository.saveUser(user);
+        return userRepository.findByName(user.getName())
+                .onErrorResume(e -> Mono.empty())
+                .flatMap(existingUser -> {
+                    log.debug("Unable to create user, there is already a user with the name: {}", user);;
+                    return Mono.<User<ID>>error(new AlreadyExistingUserException(
+                            "Invalid username: there is already an user with the name " + existingUser.getName()));
+                })
+                .switchIfEmpty(userRepository.saveUser(user))
+                .doOnNext(savedUser -> log.debug("New user created: {}", savedUser));
     }
 
     @Override
@@ -35,9 +41,4 @@ public class DomainUserService<ID> implements UserService<ID> {
         return userRepository.findByName(name);
     }
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByName(username).block();
-    }
 }

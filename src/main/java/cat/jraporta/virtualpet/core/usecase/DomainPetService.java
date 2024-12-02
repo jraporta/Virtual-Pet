@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class DomainPetService<ID> implements PetService<ID> {
 
-    PetRepository<ID> petRepository;
+    private final PetRepository<ID> petRepository;
 
     @Override
     public Mono<Pet<ID>> savePet(Pet<ID> pet) {

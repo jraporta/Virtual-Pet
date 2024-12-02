@@ -1,4 +1,4 @@
-package cat.jraporta.virtualpet.infrastructure.entity;
+package cat.jraporta.virtualpet.infrastructure.persistence.entities;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
 

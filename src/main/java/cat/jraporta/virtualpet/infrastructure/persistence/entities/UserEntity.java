@@ -2,6 +2,7 @@ package cat.jraporta.virtualpet.infrastructure.persistence.entities;
 
 import cat.jraporta.virtualpet.core.domain.enums.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Builder
 @ToString
 @AllArgsConstructor
 @Getter

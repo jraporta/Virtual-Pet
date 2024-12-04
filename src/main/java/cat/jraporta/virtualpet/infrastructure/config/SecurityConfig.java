@@ -2,6 +2,7 @@ package cat.jraporta.virtualpet.infrastructure.config;
 
 import cat.jraporta.virtualpet.infrastructure.persistence.repositories.PostgreSqlUserRepository;
 import cat.jraporta.virtualpet.infrastructure.security.UserDetailsServiceImpl;
+import cat.jraporta.virtualpet.utils.PropertiesRetriever;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +34,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PostgreSqlUserRepository postgreSqlUserRepository){
+    public ReactiveUserDetailsService reactiveUserDetailsService(PostgreSqlUserRepository postgreSqlUserRepository){
         return new UserDetailsServiceImpl(postgreSqlUserRepository);
     }
 
@@ -55,5 +57,10 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 */
+
+    @Bean
+    public PropertiesRetriever propertiesRetriever(){
+        return new PropertiesRetriever();
+    }
 
 }

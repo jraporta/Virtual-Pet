@@ -13,19 +13,19 @@ import reactor.core.publisher.Mono;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{
 
-    private final LoginRepository loginRepository;
+    private final AuthenticationRepository authenticationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthenticationServiceImpl(LoginRepository loginRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
-        this.loginRepository = loginRepository;
+    public AuthenticationServiceImpl(AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.authenticationRepository = authenticationRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
 
     @Override
     public Mono<JwtAuthenticationResponse> signIn(SignInRequest request) {
-        return loginRepository.findByUsername(request.getUser())
+        return authenticationRepository.findByUsername(request.getUser())
                 .flatMap(user -> {
                     if (user.getPassword().equals(passwordEncoder.encode(request.getPassword()))) {
                         return Mono.error(new BadCredentialsException("No user with such credentials"));
@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        return loginRepository.signUp(user)
+        return authenticationRepository.signUp(user)
                 .flatMap(unused -> Mono.just(new JwtAuthenticationResponse(jwtService.generateToken(user))));
     }
 }

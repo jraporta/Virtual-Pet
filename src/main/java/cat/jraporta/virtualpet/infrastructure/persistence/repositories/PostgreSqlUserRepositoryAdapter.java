@@ -6,7 +6,7 @@ import cat.jraporta.virtualpet.core.port.out.UserRepository;
 import cat.jraporta.virtualpet.core.exceptions.EntityNotFoundException;
 import cat.jraporta.virtualpet.infrastructure.persistence.entities.UserEntity;
 import cat.jraporta.virtualpet.infrastructure.persistence.entities.UserEntityMapper;
-import cat.jraporta.virtualpet.infrastructure.security.LoginRepository;
+import cat.jraporta.virtualpet.infrastructure.security.AuthenticationRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class PostgreSqlUserRepositoryAdapter implements UserRepository<Long>, LoginRepository {
+public class PostgreSqlUserRepositoryAdapter implements UserRepository<Long>, AuthenticationRepository {
 
     private final PostgreSqlUserRepository postgreSqlUserRepository;
     private final UserEntityMapper userEntityMapper;

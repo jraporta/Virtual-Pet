@@ -19,8 +19,8 @@ public class JwtServiceImpl implements JwtService{
 
     private final String jwtSigningKey;
 
-    public JwtServiceImpl(PropertiesRetriever properties) {
-        this.jwtSigningKey = properties.getJwtSigningKey();
+    public JwtServiceImpl(PropertiesRetriever propertiesRetriever) {
+        this.jwtSigningKey = propertiesRetriever.getJwtSigningKey();
     }
 
     @Override

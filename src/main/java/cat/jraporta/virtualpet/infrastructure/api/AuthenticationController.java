@@ -18,18 +18,24 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("api/users")
+    @PostMapping("api/register")
     public Mono<ResponseEntity<JwtAuthenticationResponse>> signUp(@RequestBody SignUpRequest request){
         log.debug("Sign up request: {}", request.getUser());
         return authenticationService.signUp(request)
-                .map(token -> ResponseEntity.status(HttpStatus.CREATED).body(token));
+                .doOnNext(unused -> log.debug("Register successful for {}, sent token", request.getUser()))
+                .map(token -> ResponseEntity.status(HttpStatus.CREATED).body(token))
+                .doOnError(error -> log.warn("Registration failed for user: {}, error: {}",
+                        request.getUser(), error.getMessage()));
     }
 
-    @GetMapping("api/users")
+    @GetMapping("api/login")
     public Mono<ResponseEntity<JwtAuthenticationResponse>> signIn(@RequestBody SignInRequest request){
         log.debug("Sign in request: {}", request.getUser());
         return authenticationService.signIn(request)
-                .map(ResponseEntity::ok);
+                .doOnNext(unused -> log.debug("Login successful for {}, sent token", request.getUser()))
+                .map(ResponseEntity::ok)
+                .doOnError(error -> log.warn("Login failed for user: {}, error: {}",
+                        request.getUser(), error.getMessage()));
     }
 
 

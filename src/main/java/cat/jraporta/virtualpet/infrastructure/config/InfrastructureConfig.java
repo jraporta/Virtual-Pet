@@ -1,8 +1,8 @@
 package cat.jraporta.virtualpet.infrastructure.config;
 
-import cat.jraporta.virtualpet.infrastructure.persistence.entities.PetEntityMapper;
-import cat.jraporta.virtualpet.infrastructure.persistence.entities.UserEntityMapper;
-import cat.jraporta.virtualpet.utils.PropertiesRetriever;
+import cat.jraporta.virtualpet.infrastructure.persistence.entity.PetEntityMapper;
+import cat.jraporta.virtualpet.infrastructure.persistence.entity.UserEntityMapper;
+import cat.jraporta.virtualpet.util.PropertiesManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,8 +20,8 @@ public class InfrastructureConfig {
     }
 
     @Bean
-    public PropertiesRetriever propertiesRetriever(){
-        return new PropertiesRetriever();
+    public PropertiesManager propertiesRetriever(){
+        return new PropertiesManager();
     }
 
 }

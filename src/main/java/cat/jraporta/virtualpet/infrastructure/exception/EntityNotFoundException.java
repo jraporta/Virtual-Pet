@@ -1,4 +1,4 @@
-package cat.jraporta.virtualpet.core.exceptions;
+package cat.jraporta.virtualpet.infrastructure.exception;
 
 public class EntityNotFoundException extends RuntimeException{
 

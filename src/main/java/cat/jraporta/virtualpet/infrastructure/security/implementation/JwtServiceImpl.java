@@ -1,6 +1,7 @@
-package cat.jraporta.virtualpet.infrastructure.security;
+package cat.jraporta.virtualpet.infrastructure.security.implementation;
 
-import cat.jraporta.virtualpet.utils.PropertiesRetriever;
+import cat.jraporta.virtualpet.infrastructure.security.JwtService;
+import cat.jraporta.virtualpet.util.PropertiesManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -15,12 +16,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtServiceImpl implements JwtService{
+public class JwtServiceImpl implements JwtService {
 
     private final String jwtSigningKey;
 
-    public JwtServiceImpl(PropertiesRetriever propertiesRetriever) {
-        this.jwtSigningKey = propertiesRetriever.getJwtSigningKey();
+    public JwtServiceImpl(PropertiesManager propertiesManager) {
+        this.jwtSigningKey = propertiesManager.getJwtSigningKey();
     }
 
     @Override
@@ -34,9 +35,8 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        String userName = extractUserName(token);
-        return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
@@ -46,14 +46,11 @@ public class JwtServiceImpl implements JwtService{
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
         return Jwts.builder()
+                .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 20))
                 .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
-    }
-
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
     }
 
     private Date extractExpiration(String token) {

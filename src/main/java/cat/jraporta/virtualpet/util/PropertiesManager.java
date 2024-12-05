@@ -1,10 +1,10 @@
-package cat.jraporta.virtualpet.utils;
+package cat.jraporta.virtualpet.util;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 
 @Getter
-public class PropertiesRetriever {
+public class PropertiesManager {
 
     //Error creating bean stems from problem fetching the property value. Check the application.properties file
 

@@ -2,7 +2,7 @@ package cat.jraporta.virtualpet.infrastructure.persistence.repositories;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
-import cat.jraporta.virtualpet.infrastructure.persistence.entities.PetEntityMapper;
+import cat.jraporta.virtualpet.infrastructure.persistence.entity.PetEntityMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

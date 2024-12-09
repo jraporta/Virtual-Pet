@@ -31,10 +31,9 @@ public class SecurityConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(HttpMethod.POST, "/api/register")
-                        .permitAll()
-                        .pathMatchers(HttpMethod.GET, "/api/login")
-                        .permitAll()
+                        .pathMatchers(HttpMethod.POST, "/api/register").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/login").permitAll()
+                        .pathMatchers("*/swagger-ui/*", "/swagger-ui.html", "*/api-docs/*", "*/api-docs*").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();
@@ -52,14 +51,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-
-
-
-
-
 
 
 }

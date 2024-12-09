@@ -1,7 +1,7 @@
 package cat.jraporta.virtualpet.application.mapper;
 
-import cat.jraporta.virtualpet.application.dto.PetDto;
-import cat.jraporta.virtualpet.application.dto.UserDto;
+import cat.jraporta.virtualpet.application.dto.both.PetDto;
+import cat.jraporta.virtualpet.application.dto.both.UserDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.User;
 import org.springframework.stereotype.Component;

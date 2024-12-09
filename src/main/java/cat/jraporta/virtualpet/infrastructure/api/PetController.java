@@ -2,10 +2,18 @@ package cat.jraporta.virtualpet.infrastructure.api;
 
 import cat.jraporta.virtualpet.application.PetServiceAdapter;
 import cat.jraporta.virtualpet.application.UserServiceAdapter;
-import cat.jraporta.virtualpet.application.dto.PetDto;
-import cat.jraporta.virtualpet.application.dto.UserDto;
+import cat.jraporta.virtualpet.application.dto.both.PetDto;
+import cat.jraporta.virtualpet.application.dto.both.UserDto;
 import cat.jraporta.virtualpet.core.domain.enums.Role;
 import cat.jraporta.virtualpet.infrastructure.exception.UnauthorizedActionException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +24,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@Tag(name = "Pet Management", description = "Endpoints for managing pets")
 @AllArgsConstructor
 @Slf4j
 @RestController
@@ -24,8 +33,30 @@ public class PetController {
     private final PetServiceAdapter petServiceAdapter;
     private final UserServiceAdapter userServiceAdapter;
 
+
+
+    @Operation(
+            summary ="Create a new Pet",
+            description = "Creates a new Pet. Ownership of the pet is determined via the JWT token.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Pet created", content = @Content(
+                            mediaType = "text/plain",
+                            examples = @ExampleObject(
+                                    name = "Id of the newly created Pet",
+                                    value = "57"
+                    )))
+            }
+    )
     @PostMapping("api/pets")
-    public Mono<ResponseEntity<Long>> createPet(@RequestBody PetDto petDto){
+    public Mono<ResponseEntity<Long>> createPet(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Data of the pet",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PetDto.class)))
+            @RequestBody PetDto petDto
+    ){
         log.debug("createPet with body: {}", petDto);
         return getUserId()
                 .flatMap(id -> {
@@ -35,13 +66,40 @@ public class PetController {
                 .map(id -> ResponseEntity.status(HttpStatus.CREATED).body(id));
     }
 
+
+
+    @Operation(
+            summary ="Get a Pet",
+            description = "Gets the details of the Pet specified in the path.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Pet found", content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PetDto.class)
+                    ))
+            }
+    )
     @GetMapping("api/pets/{id}")
-    public Mono<ResponseEntity<PetDto>> getPet(@PathVariable Long id){
+    public Mono<ResponseEntity<PetDto>> getPet(
+            @Parameter(description = "Id of the Pet", example = "57")
+            @PathVariable Long id
+    ){
         log.debug("getPet with id: {}", id);
         return petServiceAdapter.getPetById(id)
                 .map(ResponseEntity::ok);
     }
 
+
+
+    @Operation(
+            summary ="Get all the Pets",
+            description = "Gets a list of the Pet belonging to the User.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of pets", content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PetDto.class))
+                    ))
+            }
+    )
     @GetMapping("api/pets")
     public Mono<ResponseEntity<List<PetDto>>> getAllPetsOfUser(){
         return ReactiveSecurityContextHolder.getContext()
@@ -54,6 +112,17 @@ public class PetController {
     }
 
 
+
+    @Operation(
+            summary ="Get the Pets of all the Users",
+            description = "Gets a list of all the Pets in the database.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "List of pets", content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PetDto.class))
+                    ))
+            }
+    )
     @GetMapping("admin/pets")
     public Mono<ResponseEntity<List<PetDto>>> getAllThePets(){
         log.debug("get all the Pets request");
@@ -63,16 +132,48 @@ public class PetController {
                 .map(ResponseEntity::ok);
     }
 
+
+
+    @Operation(
+            summary ="Update an existing Pet",
+            description = "Updates an existing Pet.",
+            responses = {
+                    @ApiResponse(responseCode = "20", description = "Updated Pet", content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = PetDto.class)
+                            ))
+            }
+    )
     @PutMapping("api/pets")
-    public Mono<ResponseEntity<PetDto>> updatePet(@RequestBody PetDto petDto){
+    public Mono<ResponseEntity<PetDto>> updatePet(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Data of the pet",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PetDto.class)))
+            @RequestBody PetDto petDto
+    ){
         log.debug("update Pet with id: {}", petDto.getId());
         return checkOwnershipOfPet(petDto.getId())
                 .flatMap(unused -> petServiceAdapter.updatePet(petDto))
                 .map(ResponseEntity::ok);
     }
 
+
+
+    @Operation(
+            summary ="Delete a Pet",
+            description = "Deletes the Pet specified in the path.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Pet deleted", content = @Content())
+            }
+    )
     @DeleteMapping("api/pets/{id}")
-    public Mono<ResponseEntity<Void>> deletePet(@PathVariable Long id){
+    public Mono<ResponseEntity<Void>> deletePet(
+            @Parameter(description = "Id of the Pet", example = "57")
+            @PathVariable Long id
+    ){
         log.debug("delete Pet with id: {}", id);
         return checkOwnershipOfPet(id)
                 .flatMap(unused -> petServiceAdapter.deletePet(id))

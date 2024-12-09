@@ -1,9 +1,6 @@
 package cat.jraporta.virtualpet.infrastructure.api;
 
-import cat.jraporta.virtualpet.infrastructure.exception.AlreadyExistingUserException;
-import cat.jraporta.virtualpet.infrastructure.exception.InvalidCredentialsException;
-import cat.jraporta.virtualpet.infrastructure.exception.EntityNotFoundException;
-import cat.jraporta.virtualpet.infrastructure.exception.InvalidJwtException;
+import cat.jraporta.virtualpet.infrastructure.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -32,5 +29,11 @@ public class GlobalExceptionHandler {
     public Mono<ResponseEntity<String>> handleInvalidJwt(InvalidJwtException ex){
         return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage()));
     }
+
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public Mono<ResponseEntity<String>> handleUnauthorizedAction(UnauthorizedActionException ex){
+        return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage()));
+    }
+
 
 }

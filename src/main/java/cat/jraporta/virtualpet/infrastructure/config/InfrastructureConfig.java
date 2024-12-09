@@ -16,7 +16,7 @@ public class InfrastructureConfig {
 
     @Bean
     public UserEntityMapper getUserEntityMapper(){
-        return new UserEntityMapper();
+        return new UserEntityMapper(getPetEntityMapper());
     }
 
     @Bean

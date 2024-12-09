@@ -10,7 +10,7 @@ import lombok.ToString;
 public class Pet<ID> {
 
     private ID id;
-
     private String name;
+    private ID userId;
 
 }

@@ -3,6 +3,7 @@ package cat.jraporta.virtualpet.infrastructure.security.implementation;
 import cat.jraporta.virtualpet.infrastructure.security.JwtService;
 import cat.jraporta.virtualpet.util.PropertiesManager;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -45,12 +46,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails){
-        return Jwts.builder()
+        JwtBuilder builder = Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()+ 1000 * 60 * 20))
-                .signWith(getSigningKey(), Jwts.SIG.HS256)
-                .compact();
+                .signWith(getSigningKey(), Jwts.SIG.HS256);
+        extraClaims.forEach(builder::claim);
+        return builder.compact();
     }
 
     private Date extractExpiration(String token) {

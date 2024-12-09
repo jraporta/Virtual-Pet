@@ -17,4 +17,6 @@ public class PetEntity {
 
     private String name;
 
+    private Long userId;
+
 }

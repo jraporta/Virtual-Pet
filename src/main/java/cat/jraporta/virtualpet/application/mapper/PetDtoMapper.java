@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 public class PetDtoMapper {
 
     public PetDto toDto(Pet<Long> pet){
-        return new PetDto(pet.getId(), pet.getName());
+        return new PetDto(pet.getId(), pet.getName(), pet.getUserId());
     }
 
     public Pet<Long> toDomain(PetDto petDto){
-        return new Pet<Long>(petDto.getId(), petDto.getName());
+        return new Pet<Long>(petDto.getId(), petDto.getName(), petDto.getUserId());
     }
 
 }

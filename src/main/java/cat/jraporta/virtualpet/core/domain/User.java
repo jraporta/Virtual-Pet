@@ -1,9 +1,10 @@
 package cat.jraporta.virtualpet.core.domain;
 
 import cat.jraporta.virtualpet.core.domain.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @ToString
@@ -14,5 +15,6 @@ public class User<ID> {
     private String name;
     private String password;
     private Role role;
+    private List<Pet<ID>> pets = new ArrayList<>();
 
 }

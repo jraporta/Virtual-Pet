@@ -20,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.naming.AuthenticationException;
-
 @Slf4j
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {

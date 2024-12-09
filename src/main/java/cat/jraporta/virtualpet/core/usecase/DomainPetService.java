@@ -52,7 +52,7 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Void> checkOwnershipOfPet(String username, ID petId) {
         return domainUserService.getUserByUsername(username)
-                .flatMap(user -> petRepository.findById(petId)
+                .flatMap(user -> getPetById(petId)
                         .flatMap(pet -> {
                             if (pet.getUserId().equals(user.getId())) return Mono.empty();
                             return Mono.error(new UnauthorizedActionException(

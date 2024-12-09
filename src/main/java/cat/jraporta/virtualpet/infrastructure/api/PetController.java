@@ -176,8 +176,8 @@ public class PetController {
     ){
         log.debug("delete Pet with id: {}", id);
         return checkOwnershipOfPet(id)
-                .flatMap(unused -> petServiceAdapter.deletePet(id))
-                .map(unused -> ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+                .then(petServiceAdapter.deletePet(id))
+                .then(Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).build()));
     }
 
     private Mono<Void> checkOwnershipOfPet(Long petId){

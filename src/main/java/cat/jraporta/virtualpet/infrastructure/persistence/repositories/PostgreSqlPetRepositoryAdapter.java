@@ -2,6 +2,7 @@ package cat.jraporta.virtualpet.infrastructure.persistence.repositories;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
+import cat.jraporta.virtualpet.infrastructure.exception.EntityNotFoundException;
 import cat.jraporta.virtualpet.infrastructure.persistence.entity.PetEntity;
 import cat.jraporta.virtualpet.infrastructure.persistence.entity.PetEntityMapper;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class PostgreSqlPetRepositoryAdapter implements PetRepository<Long> {
     public Mono<Pet<Long>> findById(Long id) {
         log.debug("Get pet with id: {}", id);
         return postgreSqlPetRepository.findById(id)
-                .map(petEntityMapper::toDomain);
+                .map(petEntityMapper::toDomain)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("No pet found with this id")));
     }
 
     @Override

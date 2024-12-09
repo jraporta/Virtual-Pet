@@ -56,7 +56,7 @@ public class DomainPetService<ID> implements PetService<ID> {
                         .flatMap(pet -> {
                             if (pet.getUserId().equals(user.getId())) return Mono.empty();
                             return Mono.error(new UnauthorizedActionException(
-                                    "Unauthorized update: only the pet owner can update it."));
+                                    "Unauthorized action: Only the pet owner is allowed to perform this operation."));
                         })
                 );
     }

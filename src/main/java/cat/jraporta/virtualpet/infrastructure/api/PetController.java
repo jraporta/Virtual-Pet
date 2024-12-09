@@ -44,7 +44,16 @@ public class PetController {
                             examples = @ExampleObject(
                                     name = "Id of the newly created Pet",
                                     value = "57"
-                    )))
+                    ))),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )
+                            }
+                    ))
             }
     )
     @PostMapping("api/pets")
@@ -75,6 +84,21 @@ public class PetController {
                     @ApiResponse(responseCode = "200", description = "Pet found", content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = PetDto.class)
+                    )),
+                    @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Pet not found",
+                                            value = "No pet found with this id"
+                                    )})),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )}
                     ))
             }
     )
@@ -97,6 +121,15 @@ public class PetController {
                     @ApiResponse(responseCode = "200", description = "List of pets", content = @Content(
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = PetDto.class))
+                    )),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )
+                            }
                     ))
             }
     )
@@ -120,6 +153,19 @@ public class PetController {
                     @ApiResponse(responseCode = "200", description = "List of pets", content = @Content(
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = PetDto.class))
+                    )),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Unauthorized action",
+                                            value = "Unauthorized action: This operation is restricted to users with the Admin role."
+                                    ),
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )
+                            }
                     ))
             }
     )
@@ -139,9 +185,22 @@ public class PetController {
             description = "Updates an existing Pet.",
             responses = {
                     @ApiResponse(responseCode = "20", description = "Updated Pet", content = @Content(
-                            mediaType = "text/plain",
+                            mediaType = "application/json",
                             schema = @Schema(implementation = PetDto.class)
-                            ))
+                            )),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Unauthorized action",
+                                            value = "Unauthorized action: Only the pet owner is allowed to perform this operation."
+                                    ),
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )
+                            }
+                    ))
             }
     )
     @PutMapping("api/pets")
@@ -166,7 +225,27 @@ public class PetController {
             summary ="Delete a Pet",
             description = "Deletes the Pet specified in the path.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Pet deleted", content = @Content())
+                    @ApiResponse(responseCode = "204", description = "Pet deleted", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Pet not found", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Pet not found",
+                                            value = "No pet found with this id"
+                                    )})),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized action", content = @Content(
+                            mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Unauthorized action",
+                                            value = "Unauthorized action: Only the pet owner is allowed to perform this operation."
+                                    ),
+                                    @ExampleObject(
+                                            name = "Invalid JWT",
+                                            value = "Invalid JWT: token is expired"
+                                    )
+                            }
+                    ))
             }
     )
     @DeleteMapping("api/pets/{id}")
@@ -195,7 +274,7 @@ public class PetController {
                     if (securityContext.getAuthentication().getAuthorities().contains(Role.ADMIN.name())){
                         return Mono.empty();
                     }
-                    return Mono.error(new UnauthorizedActionException("Not Authorized action"));
+                    return Mono.error(new UnauthorizedActionException("Unauthorized action: This operation is restricted to users with the Admin role."));
                 });
     }
 

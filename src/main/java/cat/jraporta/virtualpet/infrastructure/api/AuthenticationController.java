@@ -29,6 +29,12 @@ public class AuthenticationController {
     @Operation(
             summary ="Register",
             description = "User registration.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "User credentials",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SignUpRequest.class))),
             responses = {
                     @ApiResponse(responseCode = "201", description = "User registered successfully", content = @Content(
                             mediaType = "application/json",
@@ -54,15 +60,7 @@ public class AuthenticationController {
             }
     )
     @PostMapping("api/register")
-    public Mono<ResponseEntity<JwtAuthenticationResponse>> signUp(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "User credentials",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = SignUpRequest.class)))
-            @Validated @RequestBody SignUpRequest request
-    ){
+    public Mono<ResponseEntity<JwtAuthenticationResponse>> signUp(@Validated @RequestBody SignUpRequest request){
         log.debug("Sign up request: {}", request.getUser());
         return authenticationService.signUp(request)
                 .doOnNext(unused -> log.debug("Register successful for {}, sent token", request.getUser()))
@@ -74,6 +72,13 @@ public class AuthenticationController {
     @Operation(
             summary ="Login",
             description = "User Login.",
+            requestBody =
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "User credentials",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = SignInRequest.class))),
             responses = {
                     @ApiResponse(responseCode = "200", description = "User logged successfully", content = @Content(
                             mediaType = "application/json",
@@ -95,15 +100,7 @@ public class AuthenticationController {
             }
     )
     @PostMapping("api/login")
-    public Mono<ResponseEntity<JwtAuthenticationResponse>> signIn(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "User credentials",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = SignInRequest.class)))
-            @Validated @RequestBody SignInRequest request
-    ){
+    public Mono<ResponseEntity<JwtAuthenticationResponse>> signIn(@Validated @RequestBody SignInRequest request){
         log.debug("Sign in request: {}", request.getUser());
         return authenticationService.signIn(request)
                 .doOnNext(unused -> log.debug("Login successful for {}, sent token", request.getUser()))

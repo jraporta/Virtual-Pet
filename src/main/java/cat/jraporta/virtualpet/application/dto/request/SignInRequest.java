@@ -1,7 +1,7 @@
 package cat.jraporta.virtualpet.application.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,11 +11,11 @@ import lombok.Getter;
 public class SignInRequest {
 
     @Schema(description = "Username", example = "Nobita")
-    @NotNull(message = "User is a required field")
+    @NotBlank(message = "User is a required field")
     String user;
 
     @Schema(description = "User password", example = "myPassword")
-    @NotNull(message = "Password is a required field")
+    @NotBlank(message = "Password is a required field")
     String password;
 
 }

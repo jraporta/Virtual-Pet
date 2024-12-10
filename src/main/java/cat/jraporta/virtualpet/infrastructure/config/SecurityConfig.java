@@ -1,6 +1,8 @@
 package cat.jraporta.virtualpet.infrastructure.config;
 
+import cat.jraporta.virtualpet.infrastructure.security.CustomCorsConfiguration;
 import cat.jraporta.virtualpet.infrastructure.security.JwtAuthenticationFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,15 +18,12 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
     private final ReactiveUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    public SecurityConfig(ReactiveUserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.userDetailsService = userDetailsService;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+    private final CustomCorsConfiguration customCorsConfiguration;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -32,10 +31,11 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.POST, "/api/register").permitAll()
-                        .pathMatchers(HttpMethod.GET, "/api/login").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .pathMatchers("*/swagger-ui/*", "/swagger-ui.html", "*/api-docs/*", "*/api-docs*").permitAll()
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .cors(corsSpec -> corsSpec.configurationSource(customCorsConfiguration))
                 .build();
     }
 

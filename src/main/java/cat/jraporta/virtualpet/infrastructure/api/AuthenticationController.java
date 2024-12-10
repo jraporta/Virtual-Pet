@@ -94,7 +94,7 @@ public class AuthenticationController {
                     ))
             }
     )
-    @GetMapping("api/login")
+    @PostMapping("api/login")
     public Mono<ResponseEntity<JwtAuthenticationResponse>> signIn(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "User credentials",

@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @AllArgsConstructor
 @Repository
@@ -43,6 +45,14 @@ public class PostgreSqlUserRepositoryAdapter implements UserRepository<String>, 
                 .flatMap(this::addPets)
                 .map(userEntityMapper::toDomain)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException("No user found with name: " + name)));
+    }
+
+    @Override
+    public Mono<List<User<String>>> findAll() {
+        log.debug("Find all the users");
+        return postgreSqlUserRepository.findAll()
+                .map(userEntityMapper::toDomain)
+                .collectList();
     }
 
     @Override

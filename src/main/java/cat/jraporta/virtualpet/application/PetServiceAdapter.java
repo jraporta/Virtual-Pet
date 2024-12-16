@@ -1,9 +1,12 @@
 package cat.jraporta.virtualpet.application;
 
+import cat.jraporta.virtualpet.application.dto.request.PetCreationRequest;
 import cat.jraporta.virtualpet.application.mapper.PetDtoMapper;
 import cat.jraporta.virtualpet.application.dto.both.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.core.domain.enums.Species;
 import cat.jraporta.virtualpet.core.port.in.PetService;
+import cat.jraporta.virtualpet.core.usecase.PetCreationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -15,15 +18,16 @@ import java.util.List;
 @Service
 public class PetServiceAdapter {
 
-    private PetService<Long> petService;
+    private PetCreationService<String> petCreationService;
+    private PetService<String> petService;
     private PetDtoMapper petDtoMapper;
 
-    public Mono<Long> savePet(PetDto petDto){
-        return petService.savePet(petDtoMapper.toDomain(petDto))
+    public Mono<String> createPet(PetCreationRequest request, String userId){
+        return petCreationService.createPet(request.getName(), Species.valueOf(request.getSpecies()), request.getColor(), userId)
                 .map(Pet::getId);
     }
 
-    public Mono<PetDto> getPetById(Long id){
+    public Mono<PetDto> getPetById(String id){
         return petService.getPetById(id)
                 .map(petDtoMapper::toDto);
     }
@@ -45,11 +49,11 @@ public class PetServiceAdapter {
                 .map(petDtoMapper::toDto);
     }
 
-    public Mono<Void> checkOwnershipOfPet(String username, Long petId) {
+    public Mono<Void> checkOwnershipOfPet(String username, String petId) {
         return petService.checkOwnershipOfPet(username, petId);
     }
 
-    public Mono<Void> deletePet(Long id) {
+    public Mono<Void> deletePet(String id) {
         return petService.deletePet(id);
     }
 }

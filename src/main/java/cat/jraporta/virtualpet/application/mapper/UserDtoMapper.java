@@ -17,15 +17,15 @@ public class UserDtoMapper {
         this.petMapper = petMapper;
     }
 
-    public UserDto toDto(User<Long> user){
+    public UserDto toDto(User<String> user){
         List<PetDto> pets = user.getPets().stream()
                 .map(petMapper::toDto)
                 .toList();
         return new UserDto(user.getId(), user.getName(), user.getRole(), pets);
     }
 
-    public User<Long> toDomain(UserDto userDto){
-        List<Pet<Long>> pets = userDto.getPets().stream()
+    public User<String> toDomain(UserDto userDto){
+        List<Pet<String>> pets = userDto.getPets().stream()
                 .map(petMapper::toDomain)
                 .toList();
         return new User<>(userDto.getId(), userDto.getName(), null, userDto.getRole(), pets);

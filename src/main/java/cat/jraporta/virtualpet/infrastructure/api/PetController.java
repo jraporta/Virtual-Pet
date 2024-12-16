@@ -4,6 +4,7 @@ import cat.jraporta.virtualpet.application.PetServiceAdapter;
 import cat.jraporta.virtualpet.application.UserServiceAdapter;
 import cat.jraporta.virtualpet.application.dto.both.PetDto;
 import cat.jraporta.virtualpet.application.dto.both.UserDto;
+import cat.jraporta.virtualpet.application.dto.request.PetCreationRequest;
 import cat.jraporta.virtualpet.core.domain.enums.Role;
 import cat.jraporta.virtualpet.infrastructure.exception.UnauthorizedActionException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,20 +58,19 @@ public class PetController {
             }
     )
     @PostMapping("api/pets")
-    public Mono<ResponseEntity<Long>> createPet(
+    public Mono<ResponseEntity<String>> createPet(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Data of the pet",
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = PetDto.class)))
-            @RequestBody PetDto petDto
+            @RequestBody PetCreationRequest petCreationRequest
     ){
-        log.debug("createPet with body: {}", petDto);
+        log.debug("createPet with body: {}", petCreationRequest);
         return getUserId()
-                .flatMap(id -> {
-                    petDto.setUserId(id);
-                    return petServiceAdapter.savePet(petDto);
+                .flatMap(userId -> {
+                    return petServiceAdapter.createPet(petCreationRequest, userId);
                 })
                 .map(id -> ResponseEntity.status(HttpStatus.CREATED).body(id));
     }
@@ -105,7 +105,7 @@ public class PetController {
     @GetMapping("api/pets/{id}")
     public Mono<ResponseEntity<PetDto>> getPet(
             @Parameter(description = "Id of the Pet", example = "57")
-            @PathVariable Long id
+            @PathVariable String id
     ){
         log.debug("getPet with id: {}", id);
         return petServiceAdapter.getPetById(id)
@@ -251,7 +251,7 @@ public class PetController {
     @DeleteMapping("api/pets/{id}")
     public Mono<ResponseEntity<Void>> deletePet(
             @Parameter(description = "Id of the Pet", example = "57")
-            @PathVariable Long id
+            @PathVariable String id
     ){
         log.debug("delete Pet with id: {}", id);
         return checkOwnershipOfPet(id)
@@ -259,7 +259,7 @@ public class PetController {
                 .then(Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).build()));
     }
 
-    private Mono<Void> checkOwnershipOfPet(Long petId){
+    private Mono<Void> checkOwnershipOfPet(String petId){
         return isAdmin().
                 onErrorResume(unused -> ReactiveSecurityContextHolder.getContext()
                         .flatMap(securityContext -> {
@@ -279,7 +279,7 @@ public class PetController {
     }
 
     //TODO: store user id in token
-    private Mono<Long> getUserId() {
+    private Mono<String> getUserId() {
         return ReactiveSecurityContextHolder.getContext()
                 .flatMap(securityContext -> {
                     String username = securityContext.getAuthentication().getName();

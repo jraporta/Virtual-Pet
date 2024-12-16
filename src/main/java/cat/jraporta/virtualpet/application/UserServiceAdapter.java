@@ -12,10 +12,10 @@ import reactor.core.publisher.Mono;
 @Service
 public class UserServiceAdapter {
 
-    private UserService<Long> userService;
+    private UserService<String> userService;
     private UserDtoMapper userDtoMapper;
 
-    public Mono<Long> saveUser(UserDto userDto){
+    public Mono<String> saveUser(UserDto userDto){
         return userService.saveUser(userDtoMapper.toDomain(userDto))
                 .map(User::getId);
     }

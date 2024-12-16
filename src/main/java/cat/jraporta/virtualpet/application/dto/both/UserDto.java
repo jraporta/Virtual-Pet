@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDto {
 
     @Schema(description = "User id", example = "102")
-    private Long id;
+    private String id;
 
     @Schema(description = "User name", example = "Nobita")
     private String name;

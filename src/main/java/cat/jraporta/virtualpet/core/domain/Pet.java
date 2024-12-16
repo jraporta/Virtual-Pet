@@ -15,7 +15,7 @@ public class Pet<ID> {
     private ID id;
     private String name;
     private ID userId;
-    private Species species;
+    private Type type;
     private String color;
     private int happiness;
     private int energy;

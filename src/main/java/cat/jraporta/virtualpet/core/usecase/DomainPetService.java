@@ -3,7 +3,7 @@ package cat.jraporta.virtualpet.core.usecase;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.PetFactory;
 import cat.jraporta.virtualpet.core.domain.User;
-import cat.jraporta.virtualpet.core.domain.enums.Species;
+import cat.jraporta.virtualpet.core.domain.enums.Type;
 import cat.jraporta.virtualpet.core.port.in.PetService;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
 import cat.jraporta.virtualpet.infrastructure.exception.UnauthorizedActionException;
@@ -26,8 +26,8 @@ public class DomainPetService<ID> implements PetService<ID> {
 
 
     @Override
-    public Mono<Pet<ID>> createPet(String name, Species species, String color, ID userId) {
-        return petFactory.createPet(name, species, color, userId)
+    public Mono<Pet<ID>> createPet(String name, Type type, String color, ID userId) {
+        return petFactory.createPet(name, type, color, userId)
                 .flatMap(pet -> {
                     log.debug("create pet: {}", pet);
                     return savePet(pet);
@@ -48,7 +48,7 @@ public class DomainPetService<ID> implements PetService<ID> {
 
     @Override
     public Mono<List<Pet<ID>>> getAllPetsOfUser(String name) {
-        return domainUserService.getUserByUsername(name)
+        return domainUserService.getUserByName(name)
                 .map(User::getPets);
     }
 
@@ -64,7 +64,7 @@ public class DomainPetService<ID> implements PetService<ID> {
 
     @Override
     public Mono<Void> checkOwnershipOfPet(String username, ID petId) {
-        return domainUserService.getUserByUsername(username)
+        return domainUserService.getUserByName(username)
                 .flatMap(user -> getPetById(petId)
                         .flatMap(pet -> {
                             if (pet.getUserId().equals(user.getId())) return Mono.empty();

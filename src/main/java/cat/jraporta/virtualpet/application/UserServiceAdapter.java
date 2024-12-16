@@ -24,7 +24,7 @@ public class UserServiceAdapter {
     }
 
     public Mono<UserDto> getUserByName(String name){
-        return userService.getUserByUsername(name)
+        return userService.getUserByName(name)
                 .map(userDtoMapper::toDto);
     }
 

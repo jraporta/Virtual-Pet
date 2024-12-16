@@ -2,6 +2,8 @@ package cat.jraporta.virtualpet.core.usecase;
 
 import cat.jraporta.virtualpet.core.domain.User;
 import cat.jraporta.virtualpet.core.domain.enums.Role;
+import cat.jraporta.virtualpet.core.exceptions.InvalidValueException;
+import cat.jraporta.virtualpet.core.exceptions.UserNotFoundException;
 import cat.jraporta.virtualpet.core.port.in.UserService;
 import cat.jraporta.virtualpet.core.port.out.UserRepository;
 import lombok.AllArgsConstructor;
@@ -27,13 +29,15 @@ public class DomainUserService<ID> implements UserService<ID> {
     @Override
     public Mono<User<ID>> getUserById(ID id) {
         log.debug("get user with id: {}", id);
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("No user found with id: " + id)));
     }
 
     @Override
-    public Mono<User<ID>> getUserByUsername(String name) {
+    public Mono<User<ID>> getUserByName(String name) {
         log.debug("get user with name: {}", name);
-        return userRepository.findByName(name);
+        return userRepository.findByName(name)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("No user found with name: " + name)));
     }
 
     @Override
@@ -43,13 +47,20 @@ public class DomainUserService<ID> implements UserService<ID> {
 
     @Override
     public Mono<User<ID>> updateUser(ID id, String name, Role role) {
-        return getUserById(id)
-                .map(user -> {
+        return getUserByName(name)
+                .flatMap(existingUser -> {
+                    if (!existingUser.getId().equals(id)){
+                        return Mono.error(new InvalidValueException("Invalid name: there's another user with that name."));
+                    }
+                    return Mono.empty();
+                })
+                .onErrorResume(UserNotFoundException.class, e -> Mono.empty())
+                .then(getUserById(id))
+                .flatMap(user -> {
                     if (name != null) user.setName(name);
                     if (role != null) user.setRole(role);
-                    return user;
-                })
-                .flatMap(this::saveUser);
+                    return saveUser(user);
+                });
     }
 
 }

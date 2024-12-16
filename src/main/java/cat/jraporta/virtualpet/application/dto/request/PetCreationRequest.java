@@ -16,10 +16,10 @@ public class PetCreationRequest {
     @Schema(description = "Pet name", example = "Doraemon")
     private String name;
 
-    @Schema(description = "species", example = "dog")
-    private String species;
+    @Schema(description = "Pet type", example = "DOG")
+    private String type;
 
-    @Schema(description = "color", example = "#917F5F")
+    @Schema(description = "Pet color", example = "#917F5F")
     private String color;
 
 }

@@ -4,7 +4,7 @@ import cat.jraporta.virtualpet.application.dto.both.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Mood;
-import cat.jraporta.virtualpet.core.domain.enums.Species;
+import cat.jraporta.virtualpet.core.domain.enums.Type;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +15,7 @@ public class PetDtoMapper {
                 pet.getId(),
                 pet.getName(),
                 pet.getUserId(),
-                pet.getSpecies().name(),
+                pet.getType().name(),
                 pet.getColor(),
                 pet.getHappiness(),
                 pet.getEnergy(),
@@ -29,7 +29,7 @@ public class PetDtoMapper {
                 petDto.getId(),
                 petDto.getName(),
                 petDto.getUserId(),
-                Species.valueOf(petDto.getSpecies()),
+                Type.valueOf(petDto.getSpecies()),
                 petDto.getColor(),
                 petDto.getHappiness(),
                 petDto.getEnergy(),

@@ -34,8 +34,7 @@ public class PostgreSqlUserRepositoryAdapter implements UserRepository<String>, 
         log.debug("Get user with id: {}", id);
         return postgreSqlUserRepository.findById(Long.valueOf(id))
                 .flatMap(this::addPets)
-                .map(userEntityMapper::toDomain)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("No user found with id: " + id)));
+                .map(userEntityMapper::toDomain);
     }
 
     @Override
@@ -43,8 +42,7 @@ public class PostgreSqlUserRepositoryAdapter implements UserRepository<String>, 
         log.debug("Get user with name: {}", name);
         return findByUsername(name)
                 .flatMap(this::addPets)
-                .map(userEntityMapper::toDomain)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("No user found with name: " + name)));
+                .map(userEntityMapper::toDomain);
     }
 
     @Override

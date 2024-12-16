@@ -19,7 +19,7 @@ public class PetEntity {
 
     private Long userId;
 
-    private String species;
+    private String type;
 
     private String color;
 

@@ -1,6 +1,6 @@
 package cat.jraporta.virtualpet.core.domain.enums;
 
-public enum Species {
+public enum Type {
 
     HAMSTER,
     CAT,

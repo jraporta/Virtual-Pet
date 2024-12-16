@@ -3,7 +3,7 @@ package cat.jraporta.virtualpet.infrastructure.persistence.entity;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Mood;
-import cat.jraporta.virtualpet.core.domain.enums.Species;
+import cat.jraporta.virtualpet.core.domain.enums.Type;
 
 public class PetEntityMapper {
 
@@ -12,7 +12,7 @@ public class PetEntityMapper {
                 pet.getId(),
                 pet.getName(),
                 Long.valueOf(pet.getUserId()),
-                pet.getSpecies().name(),
+                pet.getType().name(),
                 pet.getColor(),
                 pet.getHappiness(),
                 pet.getEnergy(),
@@ -26,7 +26,7 @@ public class PetEntityMapper {
                 petEntity.getId(),
                 petEntity.getName(),
                 petEntity.getUserId().toString(),
-                Species.valueOf(petEntity.getSpecies()),
+                Type.valueOf(petEntity.getType()),
                 petEntity.getColor(),
                 petEntity.getHappiness(),
                 petEntity.getEnergy(),

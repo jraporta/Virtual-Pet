@@ -6,7 +6,6 @@ import cat.jraporta.virtualpet.application.dto.both.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.enums.Species;
 import cat.jraporta.virtualpet.core.port.in.PetService;
-import cat.jraporta.virtualpet.core.usecase.PetCreationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -18,12 +17,11 @@ import java.util.List;
 @Service
 public class PetServiceAdapter {
 
-    private PetCreationService<String> petCreationService;
     private PetService<String> petService;
     private PetDtoMapper petDtoMapper;
 
     public Mono<String> createPet(PetCreationRequest request, String userId){
-        return petCreationService.createPet(request.getName(), Species.valueOf(request.getSpecies()), request.getColor(), userId)
+        return petService.createPet(request.getName(), Species.valueOf(request.getSpecies()), request.getColor(), userId)
                 .map(Pet::getId);
     }
 

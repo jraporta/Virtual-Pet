@@ -1,6 +1,7 @@
 package cat.jraporta.virtualpet.core.port.in;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.core.domain.enums.Species;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 public interface PetService<ID> {
 
+    Mono<Pet<ID>> createPet(String name, Species species, String color, ID userId);
     Mono<Pet<ID>> savePet(Pet<ID> pet);
     Mono<Pet<ID>> getPetById(ID id);
     Mono<List<Pet<ID>>> getAllPetsOfUser(String name);

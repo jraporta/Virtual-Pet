@@ -1,25 +1,17 @@
-package cat.jraporta.virtualpet.core.usecase;
+package cat.jraporta.virtualpet.core.domain;
 
-import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Mood;
 import cat.jraporta.virtualpet.core.domain.enums.Species;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @Service
-public class PetCreationService<ID> {
-
-    DomainPetService<ID> petService;
-
-    public PetCreationService(DomainPetService<ID> petService) {
-        this.petService = petService;
-    }
+public class PetFactory<ID> {
 
     public Mono<Pet<ID>> createPet(String name, Species species, String color, ID userId) {
-        Pet<ID> pet = (Pet<ID>) Pet.builder()
+        return Mono.just(
+                Pet.<ID>builder()
                 .name(name)
                 .userId(userId)
                 .species(species)
@@ -28,8 +20,7 @@ public class PetCreationService<ID> {
                 .energy(50)
                 .mood(Mood.HAPPY)
                 .location(Location.ROOM)
-                .build();
-        log.debug("create pet: {}", pet);
-        return petService.savePet(pet);
+                .build()
+        );
     }
 }

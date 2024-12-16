@@ -27,4 +27,6 @@ public class Pet<ID> {
     private Map<Location, Integer> locationPreferences;
     private Map<Food, Integer> foodPreferences;
 */
+    public static class PetBuilder<ID> {
+    }
 }

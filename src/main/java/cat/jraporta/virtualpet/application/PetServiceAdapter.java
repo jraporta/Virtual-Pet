@@ -1,9 +1,11 @@
 package cat.jraporta.virtualpet.application;
 
 import cat.jraporta.virtualpet.application.dto.request.PetCreationRequest;
+import cat.jraporta.virtualpet.application.dto.request.PetUpdateRequest;
 import cat.jraporta.virtualpet.application.mapper.PetDtoMapper;
-import cat.jraporta.virtualpet.application.dto.both.PetDto;
+import cat.jraporta.virtualpet.application.dto.response.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Type;
 import cat.jraporta.virtualpet.core.port.in.PetService;
 import lombok.AllArgsConstructor;
@@ -42,8 +44,16 @@ public class PetServiceAdapter {
                         .toList());
     }
 
-    public Mono<PetDto> updatePet(PetDto petDto) {
-        return petService.updatePet(petDtoMapper.toDomain(petDto))
+    public Mono<PetDto> updatePet(PetUpdateRequest petData) {
+        return petService.getPetById(petData.getId())
+                .flatMap(pet -> {
+                    if (petData.getName() != null) pet.setName(petData.getName());
+                    if (petData.getColor() != null) pet.setColor(petData.getColor());
+                    if (petData.getHasPoo() != null && !petData.getHasPoo()) pet.setHasPoo(false);
+                    if (petData.getLocation() != null) pet.setLocation(Location.valueOf(petData.getLocation()));
+                    if (petData.getAccessories() != null) pet.setAccessories(petData.getAccessories());
+                    return petService.updatePet(pet);
+                })
                 .map(petDtoMapper::toDto);
     }
 

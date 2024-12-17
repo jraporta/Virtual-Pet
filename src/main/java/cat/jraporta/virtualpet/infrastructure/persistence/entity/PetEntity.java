@@ -1,10 +1,17 @@
 package cat.jraporta.virtualpet.infrastructure.persistence.entity;
 
+import cat.jraporta.virtualpet.core.domain.enums.Accessory;
+import cat.jraporta.virtualpet.core.domain.enums.Food;
+import cat.jraporta.virtualpet.core.domain.enums.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 @ToString
 @AllArgsConstructor
@@ -29,6 +36,20 @@ public class PetEntity {
 
     private String mood;
 
+    private boolean isAsleep;
+
+    private boolean hasPoo;
+
     private String location;
+
+    private Set<Accessory> accessories;
+
+    private Map<Accessory, Integer> accessoryPreferences;
+
+    private Map<Location, Integer> locationPreferences;
+
+    private Map<Food, Integer> foodPreferences;
+
+    private Date updateDate;
 
 }

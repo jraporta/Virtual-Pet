@@ -1,6 +1,6 @@
 package cat.jraporta.virtualpet.infrastructure.api;
 
-import cat.jraporta.virtualpet.application.dto.both.PetDto;
+import cat.jraporta.virtualpet.application.dto.response.PetDto;
 import cat.jraporta.virtualpet.application.dto.response.ValidPetTypesRequest;
 import cat.jraporta.virtualpet.core.domain.enums.Type;
 import io.swagger.v3.oas.annotations.Operation;

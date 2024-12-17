@@ -1,7 +1,7 @@
 package cat.jraporta.virtualpet.infrastructure.api;
 
 import cat.jraporta.virtualpet.application.UserServiceAdapter;
-import cat.jraporta.virtualpet.application.dto.both.UserDto;
+import cat.jraporta.virtualpet.application.dto.response.UserDto;
 import cat.jraporta.virtualpet.application.dto.request.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

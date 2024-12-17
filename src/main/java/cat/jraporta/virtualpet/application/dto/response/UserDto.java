@@ -1,4 +1,4 @@
-package cat.jraporta.virtualpet.application.dto.both;
+package cat.jraporta.virtualpet.application.dto.response;
 
 import cat.jraporta.virtualpet.core.domain.enums.Role;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

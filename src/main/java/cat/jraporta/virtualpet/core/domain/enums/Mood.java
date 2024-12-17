@@ -5,7 +5,6 @@ public enum Mood {
     HAPPY,
     SAD,
     HUNGRY,
-    EXCITED,
-    ASLEEP
+    EXCITED
 
 }

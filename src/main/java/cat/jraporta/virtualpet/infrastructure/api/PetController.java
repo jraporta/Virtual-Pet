@@ -2,9 +2,10 @@ package cat.jraporta.virtualpet.infrastructure.api;
 
 import cat.jraporta.virtualpet.application.PetServiceAdapter;
 import cat.jraporta.virtualpet.application.UserServiceAdapter;
-import cat.jraporta.virtualpet.application.dto.both.PetDto;
-import cat.jraporta.virtualpet.application.dto.both.UserDto;
+import cat.jraporta.virtualpet.application.dto.response.PetDto;
+import cat.jraporta.virtualpet.application.dto.response.UserDto;
 import cat.jraporta.virtualpet.application.dto.request.PetCreationRequest;
+import cat.jraporta.virtualpet.application.dto.request.PetUpdateRequest;
 import cat.jraporta.virtualpet.core.domain.enums.Role;
 import cat.jraporta.virtualpet.infrastructure.exception.UnauthorizedActionException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -210,12 +212,12 @@ public class PetController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PetDto.class)))
-            @RequestBody PetDto petDto
+                            schema = @Schema(implementation = PetUpdateRequest.class)))
+            @Validated @RequestBody PetUpdateRequest petData
     ){
-        log.debug("update Pet with id: {}", petDto.getId());
-        return checkOwnershipOfPet(petDto.getId())
-                .flatMap(unused -> petServiceAdapter.updatePet(petDto))
+        log.debug("update Pet with id: {}", petData.getId());
+        return checkOwnershipOfPet(petData.getId())
+                .flatMap(unused -> petServiceAdapter.updatePet(petData))
                 .map(ResponseEntity::ok);
     }
 

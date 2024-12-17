@@ -1,8 +1,7 @@
 package cat.jraporta.virtualpet.application.mapper;
 
-import cat.jraporta.virtualpet.application.dto.both.PetDto;
-import cat.jraporta.virtualpet.application.dto.both.UserDto;
-import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.application.dto.response.PetDto;
+import cat.jraporta.virtualpet.application.dto.response.UserDto;
 import cat.jraporta.virtualpet.core.domain.User;
 import org.springframework.stereotype.Component;
 
@@ -22,13 +21,6 @@ public class UserDtoMapper {
                 .map(petMapper::toDto)
                 .toList();
         return new UserDto(user.getId(), user.getName(), user.getRole(), pets);
-    }
-
-    public User<String> toDomain(UserDto userDto){
-        List<Pet<String>> pets = userDto.getPets().stream()
-                .map(petMapper::toDomain)
-                .toList();
-        return new User<>(userDto.getId(), userDto.getName(), null, userDto.getRole(), pets);
     }
 
 }

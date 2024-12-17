@@ -17,7 +17,14 @@ public class PetEntityMapper {
                 pet.getHappiness(),
                 pet.getEnergy(),
                 pet.getMood().name(),
-                pet.getLocation().name()
+                pet.isAsleep(),
+                pet.isHasPoo(),
+                pet.getLocation().name(),
+                pet.getAccessories(),
+                pet.getAccessoryPreferences(),
+                pet.getLocationPreferences(),
+                pet.getFoodPreferences(),
+                pet.getUpdateDate()
         );
     }
 
@@ -31,7 +38,14 @@ public class PetEntityMapper {
                 petEntity.getHappiness(),
                 petEntity.getEnergy(),
                 Mood.valueOf(petEntity.getMood()),
-                Location.valueOf(petEntity.getLocation())
+                petEntity.isAsleep(),
+                petEntity.isHasPoo(),
+                Location.valueOf(petEntity.getLocation()),
+                petEntity.getAccessories(),
+                petEntity.getAccessoryPreferences(),
+                petEntity.getLocationPreferences(),
+                petEntity.getFoodPreferences(),
+                petEntity.getUpdateDate()
         );
     }
 

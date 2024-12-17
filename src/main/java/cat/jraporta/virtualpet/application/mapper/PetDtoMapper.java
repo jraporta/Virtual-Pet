@@ -18,7 +18,7 @@ public class PetDtoMapper {
                 pet.getEnergy(),
                 pet.getMood().name(),
                 pet.isAsleep(),
-                pet.isHasPoo(),
+                pet.getPooCountdown() == 100,
                 pet.getLocation().name(),
                 pet.getAccessories()
         );

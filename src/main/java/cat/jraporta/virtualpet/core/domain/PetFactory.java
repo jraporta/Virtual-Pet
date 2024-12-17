@@ -21,7 +21,7 @@ public class PetFactory<ID> {
                         .energy(50)
                         .mood(Mood.HAPPY)
                         .isAsleep(false)
-                        .hasPoo(false)
+                        .pooCountdown(50)
                         .location(Location.ROOM)
                         .accessories(new HashSet<>())
                         .accessoryPreferences(createPreferences(Accessory.class, -15, 15))

@@ -38,7 +38,7 @@ public class PetEntity {
 
     private boolean isAsleep;
 
-    private boolean hasPoo;
+    private int pooCountdown;
 
     private String location;
 

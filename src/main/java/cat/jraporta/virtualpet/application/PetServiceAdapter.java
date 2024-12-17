@@ -49,7 +49,7 @@ public class PetServiceAdapter {
                 .flatMap(pet -> {
                     if (petData.getName() != null) pet.setName(petData.getName());
                     if (petData.getColor() != null) pet.setColor(petData.getColor());
-                    if (petData.getHasPoo() != null && !petData.getHasPoo()) pet.setHasPoo(false);
+                    if (petData.getHasPoo() != null && !petData.getHasPoo()) pet.resetPooCountdown();
                     if (petData.getLocation() != null) pet.setLocation(Location.valueOf(petData.getLocation()));
                     if (petData.getAccessories() != null) pet.setAccessories(petData.getAccessories());
                     return petService.updatePet(pet);

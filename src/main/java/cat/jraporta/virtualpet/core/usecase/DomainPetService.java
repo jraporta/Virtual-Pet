@@ -23,6 +23,7 @@ public class DomainPetService<ID> implements PetService<ID> {
     private final PetRepository<ID> petRepository;
     private final DomainUserService<ID> domainUserService;
     private final PetFactory<ID> petFactory;
+    private final PetNeedsUpdateService<ID> petNeedsUpdateService;
 
 
     @Override
@@ -77,5 +78,10 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Void> deletePet(ID id) {
         return petRepository.deletePet(id);
+    }
+
+    private Mono<Pet<ID>> refreshPetNeeds(Pet<ID> pet){
+        petNeedsUpdateService.refresh(pet);
+        return Mono.just(pet);
     }
 }

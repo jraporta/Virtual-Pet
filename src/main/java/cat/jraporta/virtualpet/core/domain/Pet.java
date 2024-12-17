@@ -23,13 +23,17 @@ public class Pet<ID> {
     private int energy;
     private Mood mood;
     private boolean isAsleep;
-    private boolean hasPoo;
+    private int pooCountdown;
     private Location location;
     private Set<Accessory> accessories;
     private Map<Accessory, Integer> accessoryPreferences;
     private Map<Location, Integer> locationPreferences;
     private Map<Food, Integer> foodPreferences;
     private Date updateDate;
+
+    public void resetPooCountdown() {
+        pooCountdown = 100;
+    }
 
     public static class PetBuilder<ID> {
     }

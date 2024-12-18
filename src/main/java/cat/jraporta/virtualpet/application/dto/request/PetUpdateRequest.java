@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Schema(name = "Pet", description = "JSON with the Pet data")
+@Schema(name = "Pet update request", description = "JSON with the Pet data")
 @AllArgsConstructor
 @Getter
 @Setter

@@ -7,10 +7,10 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Schema(name = "Valid pet types", description = "JSON with available pet types.")
+@Schema(name = "Pet types", description = "JSON with available pet types.")
 @Getter
 @AllArgsConstructor
-public class ValidPetTypesRequest {
+public class PetTypesRequest {
 
     @ArraySchema(schema = @Schema(type = "string",
             description = "Pet type",

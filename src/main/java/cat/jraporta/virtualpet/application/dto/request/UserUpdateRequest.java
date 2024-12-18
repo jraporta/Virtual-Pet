@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Schema(name = "User", description = "JSON with the User data")
+@Schema(name = "User update request", description = "JSON with the User data")
 @AllArgsConstructor
 @Getter
 public class UserUpdateRequest {

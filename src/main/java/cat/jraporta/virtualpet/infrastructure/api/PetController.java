@@ -66,7 +66,7 @@ public class PetController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PetDto.class)))
+                            schema = @Schema(implementation = PetCreationRequest.class)))
             @RequestBody PetCreationRequest petCreationRequest
     ){
         log.debug("createPet with body: {}", petCreationRequest);

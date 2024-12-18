@@ -1,7 +1,7 @@
 package cat.jraporta.virtualpet.infrastructure.api;
 
 import cat.jraporta.virtualpet.application.dto.response.PetDto;
-import cat.jraporta.virtualpet.application.dto.response.ValidPetTypesRequest;
+import cat.jraporta.virtualpet.application.dto.response.PetTypesRequest;
 import cat.jraporta.virtualpet.core.domain.enums.Type;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,12 +28,12 @@ public class MetadataController {
             responses = {
                     @ApiResponse(responseCode = "200", content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PetDto.class)))
+                            schema = @Schema(implementation = PetTypesRequest.class)))
             }
     )
     @GetMapping("api/metadata/pet-types")
-    public Mono<ResponseEntity<ValidPetTypesRequest>> getValidPetTypes(){
-        return Mono.just(new ValidPetTypesRequest(
+    public Mono<ResponseEntity<PetTypesRequest>> getValidPetTypes(){
+        return Mono.just(new PetTypesRequest(
                 Arrays.stream(Type.values())
                         .map(Enum::name)
                         .toList()))

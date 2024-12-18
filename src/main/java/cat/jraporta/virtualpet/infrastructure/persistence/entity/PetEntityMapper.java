@@ -16,14 +16,18 @@ public class PetEntityMapper {
                 pet.getColor(),
                 pet.getHappiness(),
                 pet.getEnergy(),
+                pet.getHunger(),
                 pet.getMood().name(),
                 pet.isAsleep(),
-                pet.getPooCountdown(),
+                pet.isDead(),
+                pet.isHasPoo(),
+                pet.getPooUrge(),
                 pet.getLocation().name(),
                 pet.getAccessories(),
                 pet.getAccessoryPreferences(),
                 pet.getLocationPreferences(),
                 pet.getFoodPreferences(),
+                pet.getLastInteractionDate(),
                 pet.getUpdateDate()
         );
     }
@@ -37,14 +41,18 @@ public class PetEntityMapper {
                 petEntity.getColor(),
                 petEntity.getHappiness(),
                 petEntity.getEnergy(),
+                petEntity.getHunger(),
                 Mood.valueOf(petEntity.getMood()),
                 petEntity.isAsleep(),
-                petEntity.getPooCountdown(),
+                petEntity.isDead(),
+                petEntity.isHasPoo(),
+                petEntity.getPooUrge(),
                 Location.valueOf(petEntity.getLocation()),
                 petEntity.getAccessories(),
                 petEntity.getAccessoryPreferences(),
                 petEntity.getLocationPreferences(),
                 petEntity.getFoodPreferences(),
+                petEntity.getLastInteractionDate(),
                 petEntity.getUpdateDate()
         );
     }

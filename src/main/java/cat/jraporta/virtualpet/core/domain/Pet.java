@@ -20,20 +20,20 @@ public class Pet<ID> {
     private Type type;
     private String color;
     private int happiness;
+    private int hunger;
     private int energy;
     private Mood mood;
     private boolean isAsleep;
-    private int pooCountdown;
+    private boolean isDead;
+    private boolean hasPoo;
+    private int pooUrge;
     private Location location;
     private Set<Accessory> accessories;
     private Map<Accessory, Integer> accessoryPreferences;
     private Map<Location, Integer> locationPreferences;
     private Map<Food, Integer> foodPreferences;
+    private Date lastInteractionDate;
     private Date updateDate;
-
-    public void resetPooCountdown() {
-        pooCountdown = 100;
-    }
 
     public static class PetBuilder<ID> {
     }

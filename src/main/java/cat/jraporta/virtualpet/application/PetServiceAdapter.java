@@ -5,7 +5,6 @@ import cat.jraporta.virtualpet.application.dto.request.PetUpdateRequest;
 import cat.jraporta.virtualpet.application.mapper.PetDtoMapper;
 import cat.jraporta.virtualpet.application.dto.response.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
-import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Type;
 import cat.jraporta.virtualpet.core.port.in.PetService;
 import lombok.AllArgsConstructor;
@@ -19,8 +18,9 @@ import java.util.List;
 @Service
 public class PetServiceAdapter {
 
-    private PetService<String> petService;
-    private PetDtoMapper petDtoMapper;
+    private final PetService<String> petService;
+    private final PetDtoMapper petDtoMapper;
+    private final PetUpdateServiceAdapter petUpdateService;
 
     public Mono<String> createPet(PetCreationRequest request, String userId){
         return petService.createPet(request.getName(), Type.valueOf(request.getType()), request.getColor(), userId)
@@ -44,16 +44,10 @@ public class PetServiceAdapter {
                         .toList());
     }
 
-    public Mono<PetDto> updatePet(PetUpdateRequest petData) {
-        return petService.getPetById(petData.getId())
-                .flatMap(pet -> {
-                    if (petData.getName() != null) pet.setName(petData.getName());
-                    if (petData.getColor() != null) pet.setColor(petData.getColor());
-                    if (petData.getHasPoo() != null && !petData.getHasPoo()) pet.resetPooCountdown();
-                    if (petData.getLocation() != null) pet.setLocation(Location.valueOf(petData.getLocation()));
-                    if (petData.getAccessories() != null) pet.setAccessories(petData.getAccessories());
-                    return petService.updatePet(pet);
-                })
+    public Mono<PetDto> updatePet(PetUpdateRequest request) {
+        return petService.getPetById(request.getId())
+                .flatMap(pet -> petUpdateService.handleAction(request, pet))
+                .flatMap(petService::updatePet)
                 .map(petDtoMapper::toDto);
     }
 

@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class UserServiceAdapter {
 
-    private UserService<String> userService;
-    private UserDtoMapper userDtoMapper;
+    private final UserService<String> userService;
+    private final UserDtoMapper userDtoMapper;
 
     public Mono<UserDto> getUserByName(String name){
         return userService.getUserByName(name)

@@ -23,7 +23,7 @@ public class DomainPetService<ID> implements PetService<ID> {
     private final PetRepository<ID> petRepository;
     private final DomainUserService<ID> domainUserService;
     private final PetFactory<ID> petFactory;
-    private final PetNeedsUpdateService<ID> petNeedsUpdateService;
+    private final PetCareManagement<ID> petCareManagement;
 
 
     @Override
@@ -44,18 +44,32 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Pet<ID>> getPetById(ID id) {
         log.debug("get pet with id: {}", id);
-        return petRepository.findById(id);
+        return petRepository.findById(id)
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                });
     }
 
     @Override
     public Mono<List<Pet<ID>>> getAllPetsOfUser(String name) {
         return domainUserService.getUserByName(name)
-                .map(User::getPets);
+                .map(User::getPets)
+                .flatMapMany(Flux::fromIterable)
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                })
+                .collectList();
     }
 
     @Override
     public Flux<Pet<ID>> getAllPets() {
-        return petRepository.findAll();
+        return petRepository.findAll()
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                });
     }
 
     @Override
@@ -80,8 +94,9 @@ public class DomainPetService<ID> implements PetService<ID> {
         return petRepository.deletePet(id);
     }
 
+
     private Mono<Pet<ID>> refreshPetNeeds(Pet<ID> pet){
-        petNeedsUpdateService.refresh(pet);
+        petCareManagement.refresh(pet);
         return Mono.just(pet);
     }
 }

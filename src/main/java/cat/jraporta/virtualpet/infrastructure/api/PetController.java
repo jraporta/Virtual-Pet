@@ -208,7 +208,7 @@ public class PetController {
     @PutMapping("api/pets")
     public Mono<ResponseEntity<PetDto>> updatePet(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Data of the pet",
+                    description = "Data of the request",
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
@@ -217,7 +217,7 @@ public class PetController {
     ){
         log.debug("update Pet with id: {}", petData.getId());
         return checkOwnershipOfPet(petData.getId())
-                .flatMap(unused -> petServiceAdapter.updatePet(petData))
+                .then(petServiceAdapter.updatePet(petData))
                 .map(ResponseEntity::ok);
     }
 

@@ -43,6 +43,9 @@ public class PetDto {
     @Schema(description = "is asleep", example = "false")
     private boolean isAsleep;
 
+    @Schema(description = "is dead", example = "false")
+    private boolean isDead;
+
     @Schema(description = "has poo", example = "true")
     private boolean hasPoo;
 

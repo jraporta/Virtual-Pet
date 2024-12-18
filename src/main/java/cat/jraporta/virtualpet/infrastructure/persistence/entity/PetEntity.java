@@ -34,11 +34,17 @@ public class PetEntity {
 
     private int energy;
 
+    private int hunger;
+
     private String mood;
 
     private boolean isAsleep;
 
-    private int pooCountdown;
+    private boolean isDead;
+
+    private boolean hasPoo;
+
+    private int pooUrge;
 
     private String location;
 
@@ -49,6 +55,8 @@ public class PetEntity {
     private Map<Location, Integer> locationPreferences;
 
     private Map<Food, Integer> foodPreferences;
+
+    private Date lastInteractionDate;
 
     private Date updateDate;
 

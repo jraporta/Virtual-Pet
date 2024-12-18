@@ -7,7 +7,7 @@ import java.util.List;
 
 public class UserEntityMapper {
 
-    PetEntityMapper petMapper;
+    private final PetEntityMapper petMapper;
 
     public UserEntityMapper(PetEntityMapper petMapper) {
         this.petMapper = petMapper;

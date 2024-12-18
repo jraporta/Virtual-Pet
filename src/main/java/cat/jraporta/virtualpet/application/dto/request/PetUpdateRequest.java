@@ -1,7 +1,7 @@
 package cat.jraporta.virtualpet.application.dto.request;
 
 import cat.jraporta.virtualpet.core.domain.enums.Accessory;
-import cat.jraporta.virtualpet.core.domain.enums.Action;
+import cat.jraporta.virtualpet.application.dto.enums.Action;
 import cat.jraporta.virtualpet.core.domain.enums.Food;
 import cat.jraporta.virtualpet.core.domain.enums.Location;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -2,7 +2,7 @@ package cat.jraporta.virtualpet.application;
 
 import cat.jraporta.virtualpet.application.dto.request.PetUpdateRequest;
 import cat.jraporta.virtualpet.core.domain.Pet;
-import cat.jraporta.virtualpet.core.domain.enums.Action;
+import cat.jraporta.virtualpet.application.dto.enums.Action;
 import cat.jraporta.virtualpet.core.port.in.PetCareService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

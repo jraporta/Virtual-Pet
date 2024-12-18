@@ -1,4 +1,4 @@
-package cat.jraporta.virtualpet.application.mapper;
+package cat.jraporta.virtualpet.application.dto.mapper;
 
 import cat.jraporta.virtualpet.application.dto.response.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;

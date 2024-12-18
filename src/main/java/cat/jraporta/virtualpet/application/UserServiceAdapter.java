@@ -2,7 +2,7 @@ package cat.jraporta.virtualpet.application;
 
 import cat.jraporta.virtualpet.application.dto.response.UserDto;
 import cat.jraporta.virtualpet.application.dto.request.UserUpdateRequest;
-import cat.jraporta.virtualpet.application.mapper.UserDtoMapper;
+import cat.jraporta.virtualpet.application.dto.mapper.UserDtoMapper;
 import cat.jraporta.virtualpet.core.port.in.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

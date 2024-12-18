@@ -2,7 +2,7 @@ package cat.jraporta.virtualpet.application;
 
 import cat.jraporta.virtualpet.application.dto.request.PetCreationRequest;
 import cat.jraporta.virtualpet.application.dto.request.PetUpdateRequest;
-import cat.jraporta.virtualpet.application.mapper.PetDtoMapper;
+import cat.jraporta.virtualpet.application.dto.mapper.PetDtoMapper;
 import cat.jraporta.virtualpet.application.dto.response.PetDto;
 import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.core.domain.enums.Type;

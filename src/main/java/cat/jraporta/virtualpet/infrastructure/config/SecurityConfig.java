@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/login").permitAll()
+                        .pathMatchers("*/metadata/**").permitAll()
                         .pathMatchers("*/swagger-ui/*", "/swagger-ui.html", "*/api-docs/*", "*/api-docs*").permitAll()
+                        .pathMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyExchange().authenticated())
                 .addFilterAfter(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
                 .cors(corsSpec -> corsSpec.configurationSource(customCorsConfiguration))

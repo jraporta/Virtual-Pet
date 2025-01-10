@@ -39,7 +39,8 @@ public class JwtAuthenticationFilter implements WebFilter{
 
     private boolean isPublicEndpoint(ServerWebExchange exchange) {
         String path = exchange.getRequest().getPath().toString();
-        return path.equals("/api/register") || path.equals("/api/login") || path.contains("swagger") || path.contains("api-docs");
+        return path.equals("/api/register") || path.equals("/api/login") || path.contains("swagger") ||
+                path.contains("api-docs") || path.contains("metadata");
     }
 
     private Mono<Void> processJwt(ServerWebExchange exchange, WebFilterChain chain) {

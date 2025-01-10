@@ -1,7 +1,9 @@
 package cat.jraporta.virtualpet.core.usecase;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.core.domain.PetFactory;
 import cat.jraporta.virtualpet.core.domain.User;
+import cat.jraporta.virtualpet.core.domain.enums.Type;
 import cat.jraporta.virtualpet.core.port.in.PetService;
 import cat.jraporta.virtualpet.core.port.out.PetRepository;
 import cat.jraporta.virtualpet.infrastructure.exception.UnauthorizedActionException;
@@ -20,6 +22,18 @@ public class DomainPetService<ID> implements PetService<ID> {
 
     private final PetRepository<ID> petRepository;
     private final DomainUserService<ID> domainUserService;
+    private final PetFactory<ID> petFactory;
+    private final PetCareManagement<ID> petCareManagement;
+
+
+    @Override
+    public Mono<Pet<ID>> createPet(String name, Type type, String color, ID userId) {
+        return petFactory.createPet(name, type, color, userId)
+                .flatMap(pet -> {
+                    log.debug("create pet: {}", pet);
+                    return savePet(pet);
+                });
+    }
 
     @Override
     public Mono<Pet<ID>> savePet(Pet<ID> pet) {
@@ -30,18 +44,32 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Pet<ID>> getPetById(ID id) {
         log.debug("get pet with id: {}", id);
-        return petRepository.findById(id);
+        return petRepository.findById(id)
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                });
     }
 
     @Override
     public Mono<List<Pet<ID>>> getAllPetsOfUser(String name) {
-        return domainUserService.getUserByUsername(name)
-                .map(User::getPets);
+        return domainUserService.getUserByName(name)
+                .map(User::getPets)
+                .flatMapMany(Flux::fromIterable)
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                })
+                .collectList();
     }
 
     @Override
     public Flux<Pet<ID>> getAllPets() {
-        return petRepository.findAll();
+        return petRepository.findAll()
+                .flatMap(pet -> {
+                    petCareManagement.refresh(pet);
+                    return petRepository.savePet(pet);
+                });
     }
 
     @Override
@@ -51,7 +79,7 @@ public class DomainPetService<ID> implements PetService<ID> {
 
     @Override
     public Mono<Void> checkOwnershipOfPet(String username, ID petId) {
-        return domainUserService.getUserByUsername(username)
+        return domainUserService.getUserByName(username)
                 .flatMap(user -> getPetById(petId)
                         .flatMap(pet -> {
                             if (pet.getUserId().equals(user.getId())) return Mono.empty();
@@ -64,5 +92,11 @@ public class DomainPetService<ID> implements PetService<ID> {
     @Override
     public Mono<Void> deletePet(ID id) {
         return petRepository.deletePet(id);
+    }
+
+
+    private Mono<Pet<ID>> refreshPetNeeds(Pet<ID> pet){
+        petCareManagement.refresh(pet);
+        return Mono.just(pet);
     }
 }

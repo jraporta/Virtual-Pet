@@ -14,38 +14,38 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class PostgreSqlPetRepositoryAdapter implements PetRepository<Long> {
+public class MongoDbPetRepositoryAdapter implements PetRepository<String> {
 
-    private final PostgreSqlPetRepository postgreSqlPetRepository;
+    private final MongoDbPetRepository mongoDbPetRepository;
     private final PetEntityMapper petEntityMapper;
 
     @Override
-    public Mono<Pet<Long>> savePet(Pet<Long> pet) {
+    public Mono<Pet<String>> savePet(Pet<String> pet) {
         log.debug("Save pet: {}", pet.toString());
-        return postgreSqlPetRepository.save(petEntityMapper.toEntity(pet))
+        return mongoDbPetRepository.save(petEntityMapper.toEntity(pet))
                 .map(petEntityMapper::toDomain);
     }
 
     @Override
-    public Mono<Pet<Long>> findById(Long id) {
+    public Mono<Pet<String>> findById(String id) {
         log.debug("Get pet with id: {}", id);
-        return postgreSqlPetRepository.findById(id)
+        return mongoDbPetRepository.findById(id)
                 .map(petEntityMapper::toDomain)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException("No pet found with this id")));
     }
 
     @Override
-    public Flux<Pet<Long>> findAll() {
-        return postgreSqlPetRepository.findAll()
+    public Flux<Pet<String>> findAll() {
+        return mongoDbPetRepository.findAll()
                 .map(petEntityMapper::toDomain);
     }
 
     @Override
-    public Mono<Void> deletePet(Long id) {
-        return postgreSqlPetRepository.deleteById(id);
+    public Mono<Void> deletePet(String id) {
+        return mongoDbPetRepository.deleteById(id);
     }
 
     Flux<PetEntity> findByUserId(Long userId){
-        return postgreSqlPetRepository.findByUserId(userId);
+        return mongoDbPetRepository.findByUserId(userId);
     }
 }

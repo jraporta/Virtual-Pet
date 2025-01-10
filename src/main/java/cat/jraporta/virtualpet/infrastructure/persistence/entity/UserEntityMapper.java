@@ -7,24 +7,24 @@ import java.util.List;
 
 public class UserEntityMapper {
 
-    PetEntityMapper petMapper;
+    private final PetEntityMapper petMapper;
 
     public UserEntityMapper(PetEntityMapper petMapper) {
         this.petMapper = petMapper;
     }
 
-    public UserEntity toEntity(User<Long> user){
+    public UserEntity toEntity(User<String> user){
         List<PetEntity> pets = user.getPets().stream()
                 .map(petMapper::toEntity)
                 .toList();
-        return new UserEntity(user.getId(), user.getName(), user.getPassword(), user.getRole(), pets);
+        return new UserEntity(Long.valueOf(user.getId()), user.getName(), user.getPassword(), user.getRole(), pets);
     }
 
-    public User<Long> toDomain(UserEntity userEntity){
-        List<Pet<Long>> pets = userEntity.getPets().stream()
+    public User<String> toDomain(UserEntity userEntity){
+        List<Pet<String>> pets = userEntity.getPets().stream()
                 .map(petMapper::toDomain)
                 .toList();
-        return new User<>(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getRole(), pets);
+        return new User<>(userEntity.getId().toString(), userEntity.getName(), userEntity.getPassword(), userEntity.getRole(), pets);
     }
 
 }

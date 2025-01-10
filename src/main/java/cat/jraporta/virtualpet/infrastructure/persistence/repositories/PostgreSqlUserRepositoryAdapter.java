@@ -11,38 +11,46 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class PostgreSqlUserRepositoryAdapter implements UserRepository<Long>, AuthenticationRepository {
+public class PostgreSqlUserRepositoryAdapter implements UserRepository<String>, AuthenticationRepository {
 
     private final PostgreSqlUserRepository postgreSqlUserRepository;
-    private final PostgreSqlPetRepositoryAdapter petRepository;
+    private final MongoDbPetRepositoryAdapter petRepository;
     private final UserEntityMapper userEntityMapper;
 
     @Override
-    public Mono<User<Long>> saveUser(User<Long> user) {
+    public Mono<User<String>> saveUser(User<String> user) {
         log.debug("Save user: {}", user);
         return postgreSqlUserRepository.save(userEntityMapper.toEntity(user))
                 .map(userEntityMapper::toDomain);
     }
 
     @Override
-    public Mono<User<Long>> findById(Long id) {
+    public Mono<User<String>> findById(String id) {
         log.debug("Get user with id: {}", id);
-        return postgreSqlUserRepository.findById(id)
+        return postgreSqlUserRepository.findById(Long.valueOf(id))
                 .flatMap(this::addPets)
-                .map(userEntityMapper::toDomain)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("No user found with id: " + id)));
+                .map(userEntityMapper::toDomain);
     }
 
     @Override
-    public Mono<User<Long>> findByName(String name) {
+    public Mono<User<String>> findByName(String name) {
         log.debug("Get user with name: {}", name);
         return findByUsername(name)
                 .flatMap(this::addPets)
+                .map(userEntityMapper::toDomain);
+    }
+
+    @Override
+    public Mono<List<User<String>>> findAll() {
+        log.debug("Find all the users");
+        return postgreSqlUserRepository.findAll()
                 .map(userEntityMapper::toDomain)
-                .switchIfEmpty(Mono.error(new EntityNotFoundException("No user found with name: " + name)));
+                .collectList();
     }
 
     @Override

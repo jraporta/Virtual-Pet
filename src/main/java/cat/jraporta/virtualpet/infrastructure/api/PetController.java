@@ -273,9 +273,13 @@ public class PetController {
     private Mono<Void> isAdmin(){
         return ReactiveSecurityContextHolder.getContext()
                 .flatMap(securityContext -> {
-                    if (securityContext.getAuthentication().getAuthorities().contains(Role.ADMIN.name())){
+                    boolean isAdmin = securityContext.getAuthentication().getAuthorities().stream()
+                            .anyMatch(grantedAuthority -> Role.ADMIN.getRoleName().equals(grantedAuthority.getAuthority()));
+                    if (isAdmin){
+                        log.info("Passed isAdmin check");
                         return Mono.empty();
                     }
+                    log.info("Failed isAdmin check");
                     return Mono.error(new UnauthorizedActionException("Unauthorized action: This operation is restricted to users with the Admin role."));
                 });
     }

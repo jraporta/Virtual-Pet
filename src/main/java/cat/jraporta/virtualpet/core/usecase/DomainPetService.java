@@ -73,11 +73,6 @@ public class DomainPetService<ID> implements PetService<ID> {
     }
 
     @Override
-    public Mono<Pet<ID>> updatePet(Pet<ID> pet) {
-        return petRepository.savePet(pet);
-    }
-
-    @Override
     public Mono<Void> checkOwnershipOfPet(String username, ID petId) {
         return domainUserService.getUserByName(username)
                 .flatMap(user -> getPetById(petId)

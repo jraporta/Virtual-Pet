@@ -47,7 +47,7 @@ public class PetServiceAdapter {
     public Mono<PetDto> updatePet(PetUpdateRequest request) {
         return petService.getPetById(request.getId())
                 .flatMap(pet -> petUpdateService.handleAction(request, pet))
-                .flatMap(petService::updatePet)
+                .flatMap(petService::savePet)
                 .map(petDtoMapper::toDto);
     }
 

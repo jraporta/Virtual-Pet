@@ -121,6 +121,7 @@ public class PetCareManagement<ID> implements PetCareService<ID> {
         int oldHappiness = pet.getLocationPreferences().getOrDefault(pet.getLocation(), 0);
         int newHappiness = pet.getLocationPreferences().getOrDefault(location, 0);
         increaseStat(pet::setHappiness, pet::getHappiness, newHappiness - oldHappiness);
+        pet.setLocation(location);
         return Mono.just(pet);
     }
 

@@ -6,5 +6,4 @@ public enum Food {
     CHEESE,
     BREAD,
     FISH
-
 }

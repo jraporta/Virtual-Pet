@@ -14,7 +14,6 @@ public interface PetService<ID> {
     Mono<Pet<ID>> getPetById(ID id);
     Mono<List<Pet<ID>>> getAllPetsOfUser(String name);
     Flux<Pet<ID>> getAllPets();
-    Mono<Pet<ID>> updatePet(Pet<ID> pet);
     Mono<Void> checkOwnershipOfPet(String username, ID petId);
     Mono<Void> deletePet(ID id);
 

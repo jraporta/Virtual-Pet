@@ -58,7 +58,7 @@ public class PetCareManagement<ID> implements PetCareService<ID> {
             return;
         }
 
-        if (pet.getPooUrge() >= 100 && Math.random() < 0.2) {
+        if (pet.getPooUrge() > 90 && Math.random() < 0.2) {
             pet.setHasPoo(true);
             pet.setPooUrge(0);
         }
@@ -99,6 +99,7 @@ public class PetCareManagement<ID> implements PetCareService<ID> {
         interactWithPet(pet);
         int delta = pet.getFoodPreferences().getOrDefault(food,5);
         increaseStat(pet::setHunger, pet::getHunger, delta);
+        increaseStat(pet::setPooUrge, pet::getPooUrge, 10);
         if (pet.getHunger() < 100) {
             increaseStat(pet::setEnergy, pet::getEnergy, delta);
         }

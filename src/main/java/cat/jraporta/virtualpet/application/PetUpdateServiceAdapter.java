@@ -5,9 +5,11 @@ import cat.jraporta.virtualpet.core.domain.Pet;
 import cat.jraporta.virtualpet.application.dto.enums.Action;
 import cat.jraporta.virtualpet.core.port.in.PetCareService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class PetUpdateServiceAdapter {
@@ -27,8 +29,15 @@ public class PetUpdateServiceAdapter {
     }
 
     private Mono<Pet<String>> updatePet(Pet<String> pet, String name, String color) {
-        if (name != null) pet.setName(name);
-        if (color != null) pet.setColor(color);
+        log.debug("Pet data update starting...");
+        if (name != null) {
+            log.debug("Update pet name {}", name);
+            pet.setName(name);
+        }
+        if (color != null) {
+            log.debug("Update pet color {}", color);
+            pet.setColor(color);
+        }
         return Mono.just(pet);
     }
 }

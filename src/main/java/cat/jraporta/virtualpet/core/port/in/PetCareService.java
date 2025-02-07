@@ -13,5 +13,5 @@ public interface PetCareService<ID> {
     Mono<Pet<ID>> updateLocation(Pet<ID> pet, Location location);
     Mono<Pet<ID>> playWithPet(Pet<ID> pet);
     Mono<Pet<ID>> cleanPoo(Pet<ID> pet);
-
+    Mono<Pet<ID>> updatePetData(Pet<ID> pet, String name, String color);
 }

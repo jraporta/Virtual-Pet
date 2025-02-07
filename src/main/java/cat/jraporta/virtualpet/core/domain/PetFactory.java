@@ -11,22 +11,23 @@ public class PetFactory<ID> {
 
     public Mono<Pet<ID>> createPet(String name, Type type, String color, ID userId) {
 
+        Map<Location, Integer> locationPreferences = createPreferences(Location.class, -15, 15);
+
         return Mono.just(
                 Pet.<ID>builder()
                         .name(name)
                         .userId(userId)
                         .type(type)
                         .color(color)
-                        .happiness(50)
-                        .energy(50)
-                        .hunger(50)
+                        .happiness(new Stat(50 + locationPreferences.get(Location.ROOM)))
+                        .energy(new Stat(50))
                         .mood(Mood.HAPPY)
                         .isAsleep(false)
-                        .pooUrge(50)
+                        .pooUrge(new Stat(50))
                         .location(Location.ROOM)
                         .accessories(new HashSet<>())
                         .accessoryPreferences(createPreferences(Accessory.class, -15, 15))
-                        .locationPreferences(createPreferences(Location.class, -20, 20))
+                        .locationPreferences(locationPreferences)
                         .foodPreferences(createPreferences(Food.class, 0, 20))
                         .lastInteractionDate(new Date(System.currentTimeMillis()))
                         .updateDate(new Date(System.currentTimeMillis()))

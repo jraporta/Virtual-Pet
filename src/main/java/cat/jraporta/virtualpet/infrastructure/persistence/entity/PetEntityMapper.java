@@ -1,6 +1,7 @@
 package cat.jraporta.virtualpet.infrastructure.persistence.entity;
 
 import cat.jraporta.virtualpet.core.domain.Pet;
+import cat.jraporta.virtualpet.core.domain.Stat;
 import cat.jraporta.virtualpet.core.domain.enums.Location;
 import cat.jraporta.virtualpet.core.domain.enums.Mood;
 import cat.jraporta.virtualpet.core.domain.enums.Type;
@@ -14,14 +15,13 @@ public class PetEntityMapper {
                 Long.valueOf(pet.getUserId()),
                 pet.getType().name(),
                 pet.getColor(),
-                pet.getHappiness(),
-                pet.getEnergy(),
-                pet.getHunger(),
+                pet.getHappiness().getValue(),
+                pet.getEnergy().getValue(),
                 pet.getMood().name(),
                 pet.isAsleep(),
                 pet.isDead(),
                 pet.isHasPoo(),
-                pet.getPooUrge(),
+                pet.getPooUrge().getValue(),
                 pet.getLocation().name(),
                 pet.getAccessories(),
                 pet.getAccessoryPreferences(),
@@ -39,14 +39,13 @@ public class PetEntityMapper {
                 petEntity.getUserId().toString(),
                 Type.valueOf(petEntity.getType()),
                 petEntity.getColor(),
-                petEntity.getHappiness(),
-                petEntity.getEnergy(),
-                petEntity.getHunger(),
+                new Stat(petEntity.getHappiness()),
+                new Stat(petEntity.getEnergy()),
                 Mood.valueOf(petEntity.getMood()),
                 petEntity.isAsleep(),
                 petEntity.isDead(),
                 petEntity.isHasPoo(),
-                petEntity.getPooUrge(),
+                new Stat(petEntity.getPooUrge()),
                 Location.valueOf(petEntity.getLocation()),
                 petEntity.getAccessories(),
                 petEntity.getAccessoryPreferences(),

@@ -34,8 +34,6 @@ public class PetEntity {
 
     private int energy;
 
-    private int hunger;
-
     private String mood;
 
     private boolean isAsleep;

@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @ToString
 @AllArgsConstructor
+@EqualsAndHashCode
 public class User<ID> {
 
     private ID id;

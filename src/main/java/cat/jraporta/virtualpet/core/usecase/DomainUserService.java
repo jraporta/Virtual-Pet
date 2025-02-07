@@ -23,7 +23,7 @@ public class DomainUserService<ID> implements UserService<ID> {
     @Override
     public Mono<User<ID>> saveUser(User<ID> user) {
         return userRepository.saveUser(user)
-                .doOnNext(savedUser -> log.debug("User saved: {}", savedUser));
+                .doOnNext(savedUser -> log.trace("User saved: {}", savedUser));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class DomainUserService<ID> implements UserService<ID> {
                     return Mono.empty();
                 })
                 .onErrorResume(UserNotFoundException.class, e -> Mono.empty())
-                .then(getUserById(id))
+                .then(Mono.defer(() -> getUserById(id)))
                 .flatMap(user -> {
                     if (name != null) user.setName(name);
                     if (role != null) user.setRole(role);

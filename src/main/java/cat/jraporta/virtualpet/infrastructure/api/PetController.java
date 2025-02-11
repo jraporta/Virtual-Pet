@@ -186,7 +186,7 @@ public class PetController {
             summary ="Update an existing Pet",
             description = "Updates an existing Pet.",
             responses = {
-                    @ApiResponse(responseCode = "20", description = "Updated Pet", content = @Content(
+                    @ApiResponse(responseCode = "200", description = "Updated Pet", content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = PetDto.class)
                             )),

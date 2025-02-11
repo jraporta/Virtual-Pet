@@ -1,0 +1,49 @@
+services:
+  virtual-pet:
+    container_name: virtual-pet-container
+    image: jraporta/virtual-pet:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MONGO_URL: mongodb://mongo:27017/virtual_pet
+      DB_URL: r2dbc:postgresql://postgres:5432/virtual_pet
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      JWT_SIGNING_KEY: MyBigSecretSigningKeyMustBeLongerAndSuperSecure
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - virtual-pet-network
+    restart: always
+  postgres:
+    image: postgres:17.2-alpine
+    environment:
+      POSTGRES_DB: virtual_pet
+      POSTGRES_PASSWORD: 1234
+    networks:
+      - virtual-pet-network
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  mongo:
+    container_name: mongo-container
+    image: mongo:8.0-noble
+    networks:
+      - virtual-pet-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh
+      timeout: 5s
+      retries: 10
+
+networks:
+  virtual-pet-network:
+    driver: bridge
